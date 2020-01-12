@@ -35,7 +35,11 @@ disable() {
 
 # Delete user
 delete() {
-    userdel "${USERNAME}"
+    userdel "${USERNAME}" 2> /dev/null
+    if [[ "${?}" -eq 8 ]]
+    then
+        echo "${USERNAME} is currently logged in" >&2
+    fi
 }
 
 # Remove user
@@ -117,8 +121,6 @@ do
     then
         echo "-removing ${USERNAME}-"
     fi
-
-    # Check to see if the userdel command succeeded.
 
     # Check to see if the chage command succeeded.
 
