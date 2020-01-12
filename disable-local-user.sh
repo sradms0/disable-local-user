@@ -19,7 +19,6 @@ assert_user() {
     local _UID=$(id -u "${USERNAME}" 2> /dev/null)
     if [ -z "${_UID}" ]
     then
-        echo 'here'
         echo "${USERNAME} does not exist." >&2
         exit 1
     elif [[ "${_UID}" -lt 1000 ]]
@@ -32,6 +31,11 @@ assert_user() {
 # Disable user
 disable() {
    chage -E 0 "${USERNAME}" 
+} 
+
+# Delete user
+delete() {
+    userdel "${USERNAME}"
 }
 
 # Create the archive directory if it doesn't exist.
@@ -87,15 +91,24 @@ while [[ "${#}" -gt 0 ]]
 do
     readonly USERNAME="${1}"
     assert_user
-    disable
 
     if [[ "${ARCHIVE}" = 'true' ]]
     then
+        echo "-archiving ${USERNAME}-"
         assert_archive_dir
         archive
     fi
 
     # Delete the user.
+    if [[ "${DELETE}" = 'true' ]]
+    then 
+        echo "-deleting ${USERNAME}-"
+        delete
+    else
+        echo "-disabling ${USERNAME}-"
+        disable
+    fi
+
 
     # Check to see if the userdel command succeeded.
 
