@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 # This script disables or deletes a user from a GNU/Linux system, with optional archival.
 
