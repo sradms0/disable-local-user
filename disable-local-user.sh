@@ -20,10 +20,32 @@ then
 fi
 
 # Parse the options.
+while getopts dra OPTION
+do
+    case ${OPTION} in
+        d)
+            DELETE='true'
+            ;;
+        r)
+            REMOVE_HOME='true'
+            ;;
+        a)
+            ARCHIVE='true'
+            ;;
+        ?)
+            usage
+            ;;
+    esac
+done
 
 # Remove the options while leaving the remaining arguments.
+shift $(( $OPTIND - 1 ))
 
 # If the user doesn't supply at least one argument, give them help.
+if [[ "${#}" -eq 0 ]]
+then 
+    usage
+fi
 
 # Loop through all the usernames supplied as arguments.
 
