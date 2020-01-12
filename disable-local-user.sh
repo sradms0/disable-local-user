@@ -2,6 +2,8 @@
 
 # This script disables or deletes a user from a GNU/Linux system, with optional archival.
 
+readonly ARCHIVE_DIR='/archive'
+
 # Display the usage and exit.
 usage() {
     echo "Usage: ${0} [-dra] USER [USERNAME]" >&2
@@ -11,7 +13,6 @@ usage() {
     echo '  -a  Creates an archive of the home directory associated with the accounts(s).'
    exit 1 
 }
-
 
 # Make sure the user exists and UID of the account is at least 1000.
 assert_user() {
@@ -33,6 +34,18 @@ disable() {
    chage -E 0 "${USERNAME}" 
 }
 
+# Create the archive directory if it doesn't exist.
+assert_archive_dir() {
+    if [ ! -d "${ARCHIVE_DIR}" ]
+    then
+        mkdir "${ARCHIVE_DIR}"
+    fi
+}
+
+# Archive user directory.
+archive() {
+    tar -cvzf "${ARCHIVE_DIR}/${USERNAME}".tar.gz -C "/home" "${USERNAME}"
+}
 
 # Make sure the script is being executed with superuser privileges.
 if [[ "${UID}" -ne 0 ]]
@@ -75,6 +88,12 @@ do
     readonly USERNAME="${1}"
     assert_user
     disable
+
+    if [[ "${ARCHIVE}" = 'true' ]]
+    then
+        assert_archive_dir
+        archive
+    fi
 
     # Delete the user.
 
