@@ -3,6 +3,14 @@
 # This script disables or deletes a user from a GNU/Linux system, with optional archival.
 
 # Display the usage and exit.
+usage() {
+    echo "Usage: ${0} [-dra] USER [USERNAME]" >&2
+    echo 'Disable a local GNU/Linux account.'
+    echo '  -d  Deletes accounts'
+    echo '  -r  Removes the home directory associated with the accounts)'
+    echo '  -a  Creates an archive of the home directory associated with the accounts(s).'
+   exit 1 
+}
 
 # Make sure the script is being executed with superuser privileges.
 
