@@ -77,18 +77,10 @@ fi
 while getopts dra OPTION
 do
     case ${OPTION} in
-        d)
-            DELETE='true'
-            ;;
-        r)
-            REMOVE='true'
-            ;;
-        a)
-            ARCHIVE='true'
-            ;;
-        ?)
-            usage
-            ;;
+        d) DELETE='true';;
+        r) REMOVE='true';;
+        a) ARCHIVE='true';;
+        ?) usage;;
     esac
 done
 
@@ -131,3 +123,5 @@ do
 
     shift
 done
+
+exit 0
