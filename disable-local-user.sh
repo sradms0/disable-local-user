@@ -12,6 +12,28 @@ usage() {
    exit 1 
 }
 
+
+# Make sure the user exists and UID of the account is at least 1000.
+assert_user() {
+    local _UID=$(id -u "${USERNAME}" 2> /dev/null)
+    if [ -z "${_UID}" ]
+    then
+        echo 'here'
+        echo "${USERNAME} does not exist." >&2
+        exit 1
+    elif [[ "${_UID}" -lt 1000 ]]
+    then
+        echo "UID (${_UID}) for user ${USERNAME} is less than 1000" >&2
+        exit 1
+    fi
+}
+
+# Disable user
+disable() {
+   chage -E 0 "${USERNAME}" 
+}
+
+
 # Make sure the script is being executed with superuser privileges.
 if [[ "${UID}" -ne 0 ]]
 then
@@ -48,14 +70,11 @@ then
 fi
 
 # Loop through all the usernames supplied as arguments.
-
-    # Make sure the UID of the account is at least 1000.
-
-    # Create an archive if requested to do so.
-
-    # Make sure the ARCHIVE_DIR directory exists.
-
-    # Archive the user's home directory and move it into the ARCHIVE_DIR
+while [[ "${#}" -gt 0 ]]  
+do
+    readonly USERNAME="${1}"
+    assert_user
+    disable
 
     # Delete the user.
 
@@ -67,3 +86,5 @@ fi
 
     # Don't tell the user that an account was disabled when it hasn't been.
 
+    shift
+done
