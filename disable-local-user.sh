@@ -38,6 +38,11 @@ delete() {
     userdel "${USERNAME}"
 }
 
+# Remove user
+remove() {
+    rm -rf "/home/${USERNAME}"
+}
+
 # Create the archive directory if it doesn't exist.
 assert_archive_dir() {
     if [ ! -d "${ARCHIVE_DIR}" ]
@@ -66,7 +71,7 @@ do
             DELETE='true'
             ;;
         r)
-            REMOVE_HOME='true'
+            REMOVE='true'
             ;;
         a)
             ARCHIVE='true'
@@ -99,7 +104,6 @@ do
         archive
     fi
 
-    # Delete the user.
     if [[ "${DELETE}" = 'true' ]]
     then 
         echo "-deleting ${USERNAME}-"
@@ -109,14 +113,14 @@ do
         disable
     fi
 
+    if [[ "${REMOVE}" = 'true' ]]
+    then
+        echo "-removing ${USERNAME}-"
+    fi
 
     # Check to see if the userdel command succeeded.
 
-    # Don't tell the user that an account was deleted when it hasn't been.
-
     # Check to see if the chage command succeeded.
-
-    # Don't tell the user that an account was disabled when it hasn't been.
 
     shift
 done
