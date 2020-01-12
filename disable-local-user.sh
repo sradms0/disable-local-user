@@ -30,19 +30,21 @@ assert_user() {
 
 # Disable user
 disable() {
-   chage -E 0 "${USERNAME}" 
+   chage -E 0 "${USERNAME}" 2> /dev/null
    if [[ "${?}" -ne 0 ]]
    then
        echo "Unable to disable ${USERNAME}"
+       exit 1
    fi
 } 
 
 # Delete user
 delete() {
     userdel "${USERNAME}" 2> /dev/null
-    if [[ "${?}" -eq 8 ]]
+    if [[ "${?}" -ne 0 ]]
     then
-        echo "${USERNAME} is currently logged in" >&2
+        echo "Unable to delete ${USERNAME}" >&2
+        exit 1
     fi
 }
 
