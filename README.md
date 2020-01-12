@@ -1,4 +1,4 @@
-# Disable or delete a user from your System
+# Disable Local User
 
 ## Description
 Disable or delete a user from a GNU/Linux system, and optionally archive the user.
