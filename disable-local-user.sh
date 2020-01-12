@@ -31,6 +31,10 @@ assert_user() {
 # Disable user
 disable() {
    chage -E 0 "${USERNAME}" 
+   if [[ "${?}" -ne 0 ]]
+   then
+       echo "Unable to disable ${USERNAME}"
+   fi
 } 
 
 # Delete user
@@ -120,9 +124,8 @@ do
     if [[ "${REMOVE}" = 'true' ]]
     then
         echo "-removing ${USERNAME}-"
+        remove
     fi
-
-    # Check to see if the chage command succeeded.
 
     shift
 done
